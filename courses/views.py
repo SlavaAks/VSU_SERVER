@@ -11,22 +11,19 @@ from django.forms.models import modelform_factory
 from django.apps import apps
 from braces.views import CsrfExemptMixin, JsonRequestResponseMixin
 from django.db.models import Count
-from rest_framework import status, parsers
-from rest_framework.decorators import permission_classes
-from rest_framework.parsers import MultiPartParser, FormParser, FileUploadParser
-from rest_framework.permissions import IsAuthenticated,IsAdminUser,AllowAny
+from rest_framework import status
+from rest_framework.permissions import IsAuthenticated,IsAdminUser
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from rest_framework.renderers import TemplateHTMLRenderer
 
 from students.forms import CourseEnrollForm
-from .models import Subject, Course, Module, Content, File, Text
+from .models import Subject, Course, Module, Content
 from .forms import ModuleFormSet
 # from students.forms import CourseEnrollForm
 from django.core.cache import cache
 
-from .permissions import IsAuthor
-from .serializers import CourseSerializer, ModuleSerializer, ContentSerializer, TextSerializer, VideoSerializer, \
+
+from courses.api.serializers import CourseSerializer, ModuleSerializer, ContentSerializer, TextSerializer, VideoSerializer, \
     FileSerializer, ImageSerializer \
     # , TextSerializer
 
@@ -249,90 +246,5 @@ class CourseDetailView(DetailView):
         return context
 
 
-##########################################
-##########################################REST_FRAME
-
-
-
-#######FOR TUTORS#######################
-
-class ManageCourseListViewAPI(APIView):
-    permission_classes=(IsAuthenticated,IsAdminUser)
-
-    def get(self,request):
-        courses = Course.objects.filter(owner=request.user)
-        serializer = CourseSerializer(courses, many=True)
-        return Response(serializer.data, status=status.HTTP_200_OK)
-
-
-    def post(self,request):
-        serializer = CourseSerializer(data=request.data)
-        if serializer.is_valid():
-            course = serializer.create(request)
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-        else:
-            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-
-class CourseModuleAPI(APIView):
-    permission_classes=(IsAuthenticated,IsAdminUser,IsAuthor)
-
-    def get(self, request,pk):
-        moduls = Module.objects.filter(course=pk)
-        serializer = ModuleSerializer(moduls, many=True)
-        return Response(serializer.data, status=status.HTTP_200_OK)
-
-    def post(self, request,pk):
-        serializer = ModuleSerializer(data=request.data)
-        if serializer.is_valid():
-            module = serializer.create(request,pk)
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-        else:
-            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-class ContentAPI(APIView):
-    # parser_classes = [parsers.MultiPartParser, parsers.FormParser, FileUploadParser]
-    permission_classes=(IsAuthenticated,IsAdminUser,IsAuthor)
-
-    def get(self,request,module_id):
-        #######################обработать ошибку если нету такого модуля
-        print(module_id)
-        contents=Content.objects.filter(module=module_id)
-        serializer=ContentSerializer(contents,many=True)
-        return Response(serializer.data, status=status.HTTP_200_OK)
-
-
-
-    def post(self,request,module_id):
-        print("dddddd")
-        content_type={"text":TextSerializer,"video":VideoSerializer,"file":FileSerializer,"image":ImageSerializer}
-        print("dddddd")
-
-        if request.data['content_type'] in content_type.keys():
-            print('rrrr')
-            print(request.user)
-            print(request.data)
-            serializer=content_type[request.data.pop('content_type')](data=request.data)
-            try:
-                module=Module.objects.get(id=module_id)
-            except:
-                return Response({"detail","нет такого модуля"}, status=status.HTTP_400_BAD_REQUEST)
-
-            if serializer.is_valid():
-                print(serializer.validated_data)
-                obj=serializer.create(serializer.validated_data,request)
-                content=Content.objects.create(module=module, item=obj)
-                content.save()
-                return Response({"detail": "item is created"}, status=status.HTTP_201_CREATED)
-
-        #######################обработать ошибку если нету такого модуля
-
-        return Response({"detail":"bad data"}, status=status.HTTP_400_BAD_REQUEST)
-        # serializer = ContentSerializer()
-        # if serializer.is_valid():
-        #     module = serializer.save()
-        #     return Response(serializer.data, status=status.HTTP_201_CREATED)
-        # else:
-        #     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 

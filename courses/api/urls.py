@@ -6,16 +6,29 @@ from . import views
 app_name = 'courses'
 
 
-router = routers.DefaultRouter()
-router.register('courses', views.CourseViewSet)
+
 
 
 urlpatterns = [
-    path('subjects/',
-         views.SubjectListView.as_view(),
-         name='subject_list'),
-    path('subjects/<pk>/',
-         views.SubjectDetailView.as_view(),
-         name='subject_detail'),
-    path('', include(router.urls)),
+    path('mine/',
+         views.ManageCourseListViewAPI.as_view()
+         ),
+
+    path('/',views.CoueseViewApi.as_view()
+         ),
+
+    path('<pk>/',
+         views.ManageCourseViewAPI.as_view()
+         ),
+
+
+    path('<pk>/module/',
+         views.CourseModuleAPI.as_view()),
+
+    path('<pk>/module/order/',
+         views.CourseModuleOrderAPI.as_view()
+         ),
+
+    path('module/<int:module_id>/content/',
+         views.ContentAPI.as_view()),
 ]

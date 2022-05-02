@@ -9,7 +9,7 @@ https://docs.djangoproject.com/en/4.0/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.0/ref/settings/
 """
-
+import os
 from pathlib import Path
 import datetime
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -24,7 +24,8 @@ SECRET_KEY = 'django-insecure-9)lc^stu%5&4jy0(^yw+)=x2p^5+#!yg+#a3#6xwb6@(x(d0b2
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['10.0.2.2',
+                 '127.0.0.1']
 
 # Application definition
 
@@ -38,6 +39,7 @@ INSTALLED_APPS = [
     'rest_framework',
     # 'corsheaders',
     'courses',
+    'students',
     'users'
 ]
 
@@ -106,7 +108,9 @@ REST_FRAMEWORK = {
     ),
 }
 JWT_AUTH = {
-
+    'JWT_RESPONSE_PAYLOAD_HANDLER':
+    #'rest_framework_jwt.utils.jwt_response_payload_handler',
+    'users.views.jwt_response_payload_handler',
     'JWT_VERIFY': True,
     'JWT_VERIFY_EXPIRATION': True,
     'JWT_EXPIRATION_DELTA': datetime.timedelta(seconds=30000),
@@ -157,3 +161,6 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # Авторизированный пользователь в моделе User
 AUTH_USER_MODEL = "users.User"
+
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media/')

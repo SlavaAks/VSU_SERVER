@@ -21,6 +21,8 @@ from django.contrib.auth import views as auth_views
 #
 from rest_framework_jwt.views import obtain_jwt_token
 
+from django.conf import settings  # new
+from django.conf.urls.static import static  # new
 from courses.views import CourseListView
 from users.views import *
 
@@ -29,9 +31,14 @@ urlpatterns = [
  path('accounts/logout/', auth_views.LogoutView.as_view(), name='logout'),
  path('admin/', admin.site.urls),
  path('course/', include('courses.urls')),
+ path('api/course/',include('courses.api.urls', namespace='api')),
  path('', CourseListView.as_view(), name='course_list'),
  path('students/', include('students.urls')),
- path('log_in', obtain_jwt_token),
+ path('login', obtain_jwt_token),
  path('registration', CreateUserAPIView.as_view())
 #     path('', CourseListView.as_view(), name='course_list'),
  ]
+
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+    urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

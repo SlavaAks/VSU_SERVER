@@ -32,7 +32,7 @@
             {% for content in module.contents.all %}
                 {% with item=content.item %}
                     <h2>{{ item.title }}</h2>
-                    {{ item.render }}
+                    {{ item.render.item }}
                 {% endwith %}
             {% endfor %}
         {% endcache %}

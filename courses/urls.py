@@ -7,11 +7,6 @@ urlpatterns = [
          views.ManageCourseListView.as_view(),
          name='manage_course_list'),
 
-    path('API/mine/<slug:subject_slug>',
-         views.ManageCourseListViewAPI.as_view()
-         ),
-
-
     path('create/',
          views.CourseCreateView.as_view(),
          name='course_create'),
@@ -27,9 +22,6 @@ urlpatterns = [
          views.CourseModuleUpdateView.as_view(),
          name='course_module_update'),
 
-    path('API/<pk>/module/',
-         views.CourseModuleAPI.as_view()),
-
 
     path('module/<int:module_id>/content/<model_name>/create/',
          views.ContentCreateUpdateView.as_view(),
@@ -43,11 +35,6 @@ urlpatterns = [
     path('module/<int:module_id>/',
          views.ModuleContentListView.as_view(),
          name='module_content_list'),
-
-
-    path('API/module/<int:module_id>/content/',
-         views.ContentAPI.as_view()),
-
 
     path('module/order/',
          views.ModuleOrderView.as_view(),
