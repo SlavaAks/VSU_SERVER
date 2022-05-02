@@ -135,7 +135,7 @@ class ContentAPI(APIView):
         # print(contents)
 
         serializer=ContentSerializer(contents,many=True)
-        print(serializer.data)
+
         return Response(serializer.data, status=status.HTTP_200_OK)
 
 
