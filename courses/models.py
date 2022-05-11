@@ -5,6 +5,8 @@ from django.contrib.contenttypes.fields import GenericForeignKey
 from .fields import OrderField
 from django.template.loader import render_to_string
 from django.utils.safestring import mark_safe
+from cloudinary_storage.storage import VideoMediaCloudinaryStorage
+from cloudinary_storage.validators import validate_video
 
 
 class Subject(models.Model):
@@ -99,7 +101,12 @@ class File(ItemBase):
     file = models.FileField(upload_to='files')
 
 class Image(ItemBase):
-    file = models.FileField(upload_to='images')
+    image = models.ImageField(upload_to='images',blank=True)
+
+class VideoURL(ItemBase):
+    url = models.URLField()
 
 class Video(ItemBase):
-    url = models.URLField()
+    # video= models.FileField(upload_to='video')
+    video = models.ImageField(upload_to='videos', blank=True, storage=VideoMediaCloudinaryStorage(),
+                              validators=[validate_video])

@@ -19,12 +19,19 @@ from django.contrib.auth import views as auth_views
 # from django.urls import path, include
 # from courses.views import CourseListView
 #
-from rest_framework_jwt.views import obtain_jwt_token
+from rest_framework_jwt.views import obtain_jwt_token, refresh_jwt_token
 
 from django.conf import settings  # new
 from django.conf.urls.static import static  # new
 from courses.views import CourseListView
 from users.views import *
+from rest_framework_jwt.views import ObtainJSONWebToken, RefreshJSONWebToken, VerifyJSONWebToken
+from users.permissions import IsTokenValid
+permission_cls = {"permission_classes": (IsTokenValid,)}
+# obtain_jwt_token = ObtainJSONWebToken.as_view(**permission_cls)
+# refresh_jwt_token = RefreshJSONWebToken.as_view(**permission_cls)
+# verify_jwt_token = VerifyJSONWebToken.as_view(**permission_cls)
+
 
 urlpatterns = [
  path('accounts/login/', auth_views.LoginView.as_view(), name='login'),
@@ -32,10 +39,14 @@ urlpatterns = [
  path('admin/', admin.site.urls),
  path('course/', include('courses.urls')),
  path('api/course/',include('courses.api.urls', namespace='api')),
+ path('api/student/',include('students.api.urls')),
  path('', CourseListView.as_view(), name='course_list'),
  path('students/', include('students.urls')),
- path('login', obtain_jwt_token),
- path('registration', CreateUserAPIView.as_view())
+ path('login/', ObtainJSONWebToken.as_view()),
+ path('refresh/',RefreshJSONWebToken.as_view(**permission_cls)),
+ path('registration/', CreateUserAPIView.as_view()),
+path('activate/(?P<uidb64>[0-9A-Za-z_\-]+)/(?P<token>[0-9A-Za-z]{1,13}-[0-9A-Za-z]{1,20})/',
+activate, name='activate'),
 #     path('', CourseListView.as_view(), name='course_list'),
  ]
 

@@ -7,3 +7,8 @@ django-widget-tweaks
 djangorestframework
 djangorestframework-jwt
 django-braces
+cloudinary
+django-cloudinary-storage
+django-cloudinary-storage[video]
+redis
+pillow

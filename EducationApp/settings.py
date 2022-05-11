@@ -11,18 +11,29 @@ https://docs.djangoproject.com/en/4.0/ref/settings/
 """
 import os
 from pathlib import Path
+import environ
 import datetime
+import cloudinary_storage
+import cloudinary
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
+env = environ.Env()
+print(env)
+env.read_env(os.path.join(BASE_DIR, '.env'))
 
+SECRET_KEY = env('SECRET_KEY')
+print(env('SECRET_KEY'))
+print(os.getenv('SECRET_KEY'))
+DEBUG = int(os.environ.get("DEBUG", default=0))
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-9)lc^stu%5&4jy0(^yw+)=x2p^5+#!yg+#a3#6xwb6@(x(d0b2'
+
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+
 
 ALLOWED_HOSTS = ['10.0.2.2',
                  '127.0.0.1']
@@ -35,9 +46,11 @@ INSTALLED_APPS = [
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
-    'django.contrib.staticfiles',
     'rest_framework',
     # 'corsheaders',
+    'cloudinary_storage',
+    'django.contrib.staticfiles',
+    'cloudinary',
     'courses',
     'students',
     'users'
@@ -79,8 +92,12 @@ WSGI_APPLICATION = 'EducationApp.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': 'mydatabase',
+        'ENGINE': env('POSTGRES_ENGINE'),
+        'NAME': env('POSTGRES_DB'),
+        'USER': env('POSTGRES_USER'),
+        'PASSWORD': env('POSTGRES_PASSWORD'),
+        'HOST': env('POSTGRES_HOST'),
+        'PORT': env('POSTGRES_PORT')
     }
 }
 
@@ -95,7 +112,7 @@ DATABASES = {
 #     }
 # }
 
-#Авторизация и аунтификация
+# Авторизация и аутентификация
 
 REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': (
@@ -107,18 +124,19 @@ REST_FRAMEWORK = {
         'rest_framework.authentication.BasicAuthentication',
     ),
 }
+
 JWT_AUTH = {
     'JWT_RESPONSE_PAYLOAD_HANDLER':
-    #'rest_framework_jwt.utils.jwt_response_payload_handler',
-    'users.views.jwt_response_payload_handler',
+    # 'rest_framework_jwt.utils.jwt_response_payload_handler',
+        'users.views.jwt_response_payload_handler',
+    # 'ss',
     'JWT_VERIFY': True,
     'JWT_VERIFY_EXPIRATION': True,
-    'JWT_EXPIRATION_DELTA': datetime.timedelta(seconds=30000),
+    'JWT_EXPIRATION_DELTA': datetime.timedelta(seconds=3000),
     'JWT_AUTH_HEADER_PREFIX': 'Bearer',
+    'JWT_ALLOW_REFRESH': True,
 
 }
-
-
 
 # Password validation
 # https://docs.djangoproject.com/en/4.0/ref/settings/#auth-password-validators
@@ -164,3 +182,74 @@ AUTH_USER_MODEL = "users.User"
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media/')
+
+# EMAIL_USE_TLS = True
+# EMAIL_HOST = 'smtp.gmail.com'
+# EMAIL_HOST_USER = 'aks8slavent@gmail.com'
+# EMAIL_HOST_PASSWORD = '1801290037Vd1801290037'
+# EMAIL_PORT = 587
+
+
+EMAIL_HOST = 'smtp.mail.ru'
+EMAIL_PORT = 2525
+EMAIL_HOST_USER = "aks8slava@mail.ru"
+EMAIL_HOST_PASSWORD = "wWXMt101qpdjLEYUh2QS"
+EMAIL_USE_TLS = True
+EMAIL_USE_SSL = False
+
+# cloudinary.config(
+#   cloud_name = "dnthi0e0f",
+#   api_key = "784389769832817",
+#   api_secret = "mWjwBuzn00B1VHd2R26PGT8yu_c"
+# )
+
+CLOUDINARY_STORAGE = {
+    'CLOUD_NAME': 'dnthi0e0f',
+    'API_KEY': '784389769832817',
+    'API_SECRET': 'mWjwBuzn00B1VHd2R26PGT8yu_c'
+}
+DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
+
+
+
+
+
+
+
+
+
+
+
+
+# DEFAULT_FILE_STORAGE = 'storages.backends.dropbox.DropBoxStorage'
+#
+#
+# DROPBOX_APP_KEY = "dwf56nap1leidhj"
+# DROPBOX_APP_SECRET_KEY = "d29l8rir8hwi9gp"
+# DROPBOX_APP_ACCESS_TOKEN = "sl.BHVT7Qc_TwgxgE8vEN82h6UKeO1GBf17xqP4bruUDU0xJgaWa7Q3gc_uM7tuMPB80U3nuO-XoksonMEXUr74m7O9diIQUyH71j3BQZKK0fPHizBrgAayeCiyiQ-Wbj5cAUYb_zc"
+# DROPBOX_APP_ACCESS_TOKEN_SECRET = ""
+# DROPBOX_OAUTH2_TOKEN='sl.BHVT7Qc_TwgxgE8vEN82h6UKeO1GBf17xqP4bruUDU0xJgaWa7Q3gc_uM7tuMPB80U3nuO-XoksonMEXUr74m7O9diIQUyH71j3BQZKK0fPHizBrgAayeCiyiQ-Wbj5cAUYb_zc'
+# DROPBOX_ROOT_PATH=''
+# # Optional values below
+#
+# # The folder where you want the files uploaded.
+# # Example: /Public or /
+# DROPBOX_FILE_UPLOAD_FOLDER = ""
+# # The value below may be either 'app_folder' or 'dropbox'
+# DROPBOX_ACCESS_TYPE = ""
+
+REDIS_HOST = 'localhost'
+REDIS_PORT = 6379
+
+
+
+
+# CACHES = {
+#     'default': {
+#         "BACKEND": "EducationApp.cache.RedisCache",
+#         "LOCATION": "redis://127.0.0.1:6379/",
+#         "OPTIONS": {
+#             "CLIENT_CLASS": "django_redis.client.DefaultClient",
+#         }
+#     }
+# }

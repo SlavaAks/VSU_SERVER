@@ -8,8 +8,36 @@ services:
 
         volumes:
             - .:/usr/src/
+            -  "/etc/timezone:/etc/timezone:ro"
+            -  "/etc/localtime:/etc/localtime:ro"
         ports:
             - "8000:8000"
         environment:
+            - TZ=Belarus/Minsk
             - DEBUG=1
-            - DJANGO_ALLOWED_HOSTS=localhost 127.0.0.1 [::1]
+            - DJANGO_ALLOWED_HOSTS=localhost 127.0.0.1 [::1]]
+        depends_on:
+            - db_postgres_educa
+    db_postgres_educa:
+        image: postgres
+        container_name: db_postgres_educa
+        env_file: .env
+        volumes:
+            - pgd:/var/lib/postgresql/data6/
+            - "/etc/timezone:/etc/timezone:ro"
+            - "/etc/localtime:/etc/localtime:ro"
+    redis_educa:
+        restart: always
+        container_name: redis_educa
+        image: redis:latest
+        ports:
+            - "6379:6379"
+        volumes:
+            - redisdata:/var/lib/redisdata/data1/
+
+volumes:
+    pgd:
+    redisdata:
+
+
+
