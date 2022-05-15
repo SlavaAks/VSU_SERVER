@@ -31,6 +31,20 @@ from rest_framework import viewsets
 from rest_framework.decorators import action
 from .permissions import IsEnrolled
 
+class StudentSubjectCoursesAPI(APIView):
+    permission_classes = (IsAuthenticated,)
+
+    def get(self,request,id):
+        try:
+            subject=Subject.objects.get(id=id)
+            courses=Course.objects.filter(subject=subject)
+            serializer=CourseSerializer(courses,many=True)
+            return Response(serializer.data,status=status.HTTP_200_OK)
+        except:
+            return Response(status=status.HTTP_400_BAD_REQUEST)
+
+
+
 
 class StudentEnrollCourseView(APIView):
 

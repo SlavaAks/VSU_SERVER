@@ -1,9 +1,17 @@
+import json
+
+import dropbox
+import redis as redis
 from django.contrib.auth.decorators import permission_required
+from django.core.cache import cache
+from django.core.cache.backends.base import DEFAULT_TIMEOUT
 from django.utils.decorators import method_decorator
 from rest_framework import generics, status
+
+from EducationApp import settings
 from ..models import Subject, Module, Content
 from .serializers import TextSerializer, VideoSerializer, FileSerializer, ImageSerializer, \
-    ModuleSerializer, ContentSerializer
+    ModuleSerializer, ContentSerializer, SubjectSerializer
 from django.shortcuts import get_object_or_404
 from rest_framework.views import APIView
 from rest_framework.response import Response
@@ -15,36 +23,32 @@ from .serializers import CourseSerializer
 from .permissions import IsAuthor
 from cloudinary.models import UploadedFile
 
+# redis_instance = redis.StrictRedis(host=settings.REDIS_HOST,
+#                                   port=settings.REDIS_PORT, db=0)
+CACHE_TTL = getattr(settings, 'CACHE_TTL', DEFAULT_TIMEOUT)
+class SubjectViewAPI(APIView):
+    permission_classes = (IsAuthenticated, IsAdminUser)
 
-# class SubjectListView(generics.ListAPIView):
-#     queryset = Subject.objects.all()
-#     serializer_class = SubjectSerializer
-#
-#
-# class SubjectDetailView(generics.RetrieveAPIView):
-#     queryset = Subject.objects.all()
-#     serializer_class = SubjectSerializer
-#
-#
-# class CourseViewSet(viewsets.ReadOnlyModelViewSet):
-#     queryset = Course.objects.all()
-#     serializer_class = CourseSerializer
-#
-#     @detail_route(methods=['post'],
-#                       authentication_classes=[BasicAuthentication],
-#                       permission_classes=[IsAuthenticated])
-#     def enroll(self, request, *args, **kwargs):
-#         course = self.get_object()
-#         course.students.add(request.user)
-#         return Response({'enrolled': True})
-#
-#     @detail_route(methods=['get'],
-#                   serializer_class=CourseWithContentsSerializer,
-#                   authentication_classes=[BasicAuthentication],
-#                   permission_classes=[IsAuthenticated,
-#                                       IsEnrolled])
-#     def contents(self, request, *args, **kwargs):
-#         return self.retrieve(request, *args, **kwargs)
+    def get(self,request):
+        if 'subjects' in cache:
+            # get results from cache
+            subjects = cache.get('subjects')
+            return Response(subjects, status=status.HTTP_200_OK)
+
+        else:
+            subjects = Subject.objects.all()
+            results = [subject.to_json() for subject in subjects]
+            # store data in cache
+            cache.set('subjects', results, timeout=CACHE_TTL)
+            return Response(results, status=status.HTTP_200_OK)
+
+    def post(self,request):
+        serializer=SubjectSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.create(request.data)
+            return Response(serializer.data,status=status.HTTP_200_OK)
+        else:
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 #######FOR TUTORS#######################
@@ -78,10 +82,10 @@ class CourseViewApi(APIView):
 
 
 class ManageCourseViewAPI(APIView):
-    permission_classes = (IsAuthenticated, IsAdminUser)
+    permission_classes = (IsAuthenticated,IsAuthor)
 
     def delete(self, request, pk):
-        print(pk)
+        self.check_object_permissions(request, pk)
         event = Course.objects.get(id=pk)
         if event:
             event.delete()
@@ -150,28 +154,26 @@ class ContentAPI(APIView):
         # print(module.id)
         # # serializer=ModuleWithContentsSerializer(module)
 
+
         contents = Content.objects.filter(module=module_id)
 
-        # print(contents)
-
         serializer = ContentSerializer(contents, many=True)
+        # print(serializer.data)
 
         return Response(serializer.data, status=status.HTTP_200_OK)
 
     def post(self, request, module_id):
-        print("dddddd")
         content_type = {"text": TextSerializer, "video": VideoSerializer, "file": FileSerializer,
                         "image": ImageSerializer}
-        print("dddddd")
         data = request.data.dict()
         try:
             data['content_type']
         except:
             raise
         if data['content_type'] in content_type.keys():
-            print('rrrr')
-            print(data)
-            print(request.FILES)
+            # print('rrrr')
+            # print(data)
+            # print(request.FILES)
             serializer = content_type[data.get('content_type')](data=data)
             try:
                 module = Module.objects.get(id=module_id)
@@ -180,8 +182,10 @@ class ContentAPI(APIView):
 
             if serializer.is_valid():
                 print(serializer.validated_data)
+
                 obj = serializer.create(serializer.validated_data, request)
-                UploadedFile(file='courses/static/file_example_XLSX_50.xlsx')
+                # UploadedFile(file='courses/static/file_example_XLSX_50.xlsx')
+                print(obj)
                 content = Content.objects.create(module=module, item=obj)
                 content.save()
                 return Response({"detail": "item is created"}, status=status.HTTP_201_CREATED)
@@ -213,3 +217,5 @@ class ContentManagerAPI(APIView):
             return Response(status=status.HTTP_404_NOT_FOUND)
 
         return Response(status=status.HTTP_204_NO_CONTENT)
+# {"title":"smath",
+# "slug":"sssssd"}

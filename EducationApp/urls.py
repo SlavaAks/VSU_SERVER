@@ -23,7 +23,10 @@ from rest_framework_jwt.views import obtain_jwt_token, refresh_jwt_token
 
 from django.conf import settings  # new
 from django.conf.urls.static import static  # new
+
+from courses.api.views import SubjectViewAPI
 from courses.views import CourseListView
+from tickets.views import APIUserTickets, APISupportTicket, ViewTickets, ViewResponse
 from users.views import *
 from rest_framework_jwt.views import ObtainJSONWebToken, RefreshJSONWebToken, VerifyJSONWebToken
 from users.permissions import IsTokenValid
@@ -39,7 +42,12 @@ urlpatterns = [
  path('admin/', admin.site.urls),
  path('course/', include('courses.urls')),
  path('api/course/',include('courses.api.urls', namespace='api')),
+ path('api/subject/',SubjectViewAPI.as_view()),
  path('api/student/',include('students.api.urls')),
+ path('user_tickets/', APIUserTickets.as_view()),
+ path('tickets/', ViewTickets.as_view()),
+ path('support_response/<int:ticket_id>/', APISupportTicket.as_view()),
+ path('ticket_response/<int:ticket_id>/', ViewResponse.as_view()),
  path('', CourseListView.as_view(), name='course_list'),
  path('students/', include('students.urls')),
  path('login/', ObtainJSONWebToken.as_view()),

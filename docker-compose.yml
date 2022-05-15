@@ -22,6 +22,8 @@ services:
         image: postgres
         container_name: db_postgres_educa
         env_file: .env
+        ports:
+            - 5432:5432
         volumes:
             - pgd:/var/lib/postgresql/data6/
             - "/etc/timezone:/etc/timezone:ro"
@@ -34,10 +36,33 @@ services:
             - "6379:6379"
         volumes:
             - redisdata:/var/lib/redisdata/data1/
+    celery:
+        build: .
+        command: celery -A EducationApp worker -l INFO
+        volumes:
+            - .:/usr/src/
+        environment:
+            - DEBUG=1
+            - DJANGO_ALLOWED_HOSTS=localhost 127.0.0.1 [::1]
+            - CELERY_BROKER=redis://redis_educa:6379/
+            - CELERY_BACKEND=redis://redis_educa:6379/
+        depends_on:
+            - django
+            - redis_educa
+#
+#
+#    dropbox:
+#        image: rbonghi/dropbox:latest
+#        environment:
+#            - PYTHONUNBUFFERED=1
+#            - DROPBOX_TOKEN=sl.BHlwmK-Hg1uIUB3ko8-BttS4z_vMWtC_tBId4tVOulgOwVyubvIa1Ke079kDKdHywhoGjY5FlETSMwVlL8ZdtsKPaQJwOv6cBYeXUAGz8Af9sSSn8YLlvpsWooaDC1w5138kfYHJUXgm
+#        volumes:
+#            - VSU_STORAGE:/dropbox
 
 volumes:
     pgd:
     redisdata:
+    VSU_STORAGE:
 
 
 

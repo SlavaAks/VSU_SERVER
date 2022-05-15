@@ -1,3 +1,5 @@
+import pathlib
+from django.core.files import File as _File
 from django.contrib.contenttypes.models import ContentType
 from rest_framework import serializers
 
@@ -8,6 +10,15 @@ class SubjectSerializer(serializers.ModelSerializer):
     class Meta:
         model = Subject
         fields = ['id', 'title', 'slug']
+
+    def create(self, validated_data):
+
+        subject = Subject(
+            title=validated_data['title'],
+            slug=validated_data['slug']
+        )
+        subject.save()
+        return subject
 
 
 class CourseSerializer(serializers.ModelSerializer):
@@ -156,9 +167,10 @@ class FileSerializer(serializers.ModelSerializer):
         model = File
         fields = ["title"]
 
-    def create(self, validated_data, request):
+    def create(self, validated_data, request,dbx):
         validated_data["owner"] = request.user
         print(request.data['file'])
+        response = dbx.files_upload(request.data['file'].file.read(), '/myfile.mp4')
         validated_data["file"] = request.data['file']
         file = File.objects.create(**validated_data)
         file.save()
@@ -188,9 +200,11 @@ class VideoSerializer(ItemSerializer):
 
     def create(self, validated_data, request):
         validated_data['owner'] = request.user
-        print(request.data['video'])
+        print(request.data['video']._name)
         validated_data['video'] = request.data['video']
-        video = Video.objects.create(**validated_data)
+        video=Video(**validated_data)
+        # video = Video.objects.create(**validated_data)
+        print(video.video,"test")
         video.save()
         return video
 

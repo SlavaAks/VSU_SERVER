@@ -11,13 +11,13 @@ https://docs.djangoproject.com/en/4.0/ref/settings/
 """
 import os
 from pathlib import Path
+
 import environ
 import datetime
-import cloudinary_storage
-import cloudinary
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
+
 env = environ.Env()
 print(env)
 env.read_env(os.path.join(BASE_DIR, '.env'))
@@ -26,6 +26,7 @@ SECRET_KEY = env('SECRET_KEY')
 print(env('SECRET_KEY'))
 print(os.getenv('SECRET_KEY'))
 DEBUG = int(os.environ.get("DEBUG", default=0))
+
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.0/howto/deployment/checklist/
 
@@ -47,13 +48,15 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'rest_framework',
-    # 'corsheaders',
-    'cloudinary_storage',
+    'corsheaders',
+    # 'cloudinary_storage',
     'django.contrib.staticfiles',
-    'cloudinary',
+    'storages',
+    # 'cloudinary',
     'courses',
     'students',
-    'users'
+    'users',
+    'tickets'
 ]
 
 MIDDLEWARE = [
@@ -104,10 +107,10 @@ DATABASES = {
 # DATABASES = {
 #     'default': {
 #         'ENGINE': 'django.db.backends.postgresql',
-#         'NAME': 'mydatabase',
-#         'USER': 'mydatabaseuser',
-#         'PASSWORD': '1111',
-#         'HOST': '127.0.0.1',
+#         'NAME': 'FileStorage',
+#         'USER': 'django_auth',
+#         'PASSWORD': 'asdfgh',
+#         'HOST': 'localhost',
 #         'PORT': '5432',
 #     }
 # }
@@ -180,8 +183,9 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 # Авторизированный пользователь в моделе User
 AUTH_USER_MODEL = "users.User"
 
-MEDIA_URL = '/media/'
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media/')
+MEDIA_ROOT = os.path.join('', 'media')
+# MEDIA_URL = '/media/'
+
 
 # EMAIL_USE_TLS = True
 # EMAIL_HOST = 'smtp.gmail.com'
@@ -197,59 +201,37 @@ EMAIL_HOST_PASSWORD = "wWXMt101qpdjLEYUh2QS"
 EMAIL_USE_TLS = True
 EMAIL_USE_SSL = False
 
-# cloudinary.config(
-#   cloud_name = "dnthi0e0f",
-#   api_key = "784389769832817",
-#   api_secret = "mWjwBuzn00B1VHd2R26PGT8yu_c"
-# )
+DROPBOX_APP_KEY = "oe3qs842awm9lhv"
+DROPBOX_APP_SECRET_KEY = "iiomjbcfinh8bqb"
+DROPBOX_ROOT_PATH = ''
 
-CLOUDINARY_STORAGE = {
-    'CLOUD_NAME': 'dnthi0e0f',
-    'API_KEY': '784389769832817',
-    'API_SECRET': 'mWjwBuzn00B1VHd2R26PGT8yu_c'
-}
-DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
+DROPBOX_OAUTH2_TOKEN = "sl.BHlwmK-Hg1uIUB3ko8-BttS4z_vMWtC_tBId4tVOulgOwVyubvIa1Ke079kDKdHywhoGjY5FlETSMwVlL8ZdtsKPaQJwOv6cBYeXUAGz8Af9sSSn8YLlvpsWooaDC1w5138kfYHJUXgm"
+DEFAULT_FILE_STORAGE = 'storages.backends.dropbox.DropBoxStorage'
 
-
-
-
-
-
-
-
-
-
-
-
-# DEFAULT_FILE_STORAGE = 'storages.backends.dropbox.DropBoxStorage'
-#
-#
-# DROPBOX_APP_KEY = "dwf56nap1leidhj"
-# DROPBOX_APP_SECRET_KEY = "d29l8rir8hwi9gp"
-# DROPBOX_APP_ACCESS_TOKEN = "sl.BHVT7Qc_TwgxgE8vEN82h6UKeO1GBf17xqP4bruUDU0xJgaWa7Q3gc_uM7tuMPB80U3nuO-XoksonMEXUr74m7O9diIQUyH71j3BQZKK0fPHizBrgAayeCiyiQ-Wbj5cAUYb_zc"
-# DROPBOX_APP_ACCESS_TOKEN_SECRET = ""
-# DROPBOX_OAUTH2_TOKEN='sl.BHVT7Qc_TwgxgE8vEN82h6UKeO1GBf17xqP4bruUDU0xJgaWa7Q3gc_uM7tuMPB80U3nuO-XoksonMEXUr74m7O9diIQUyH71j3BQZKK0fPHizBrgAayeCiyiQ-Wbj5cAUYb_zc'
-# DROPBOX_ROOT_PATH=''
-# # Optional values below
-#
-# # The folder where you want the files uploaded.
-# # Example: /Public or /
-# DROPBOX_FILE_UPLOAD_FOLDER = ""
-# # The value below may be either 'app_folder' or 'dropbox'
-# DROPBOX_ACCESS_TYPE = ""
-
-REDIS_HOST = 'localhost'
+REDIS_HOST = 'redis_educa'
 REDIS_PORT = 6379
 
+CACHES = {
+    'default': {
+        'BACKEND': 'django_redis.cache.RedisCache',
+        'LOCATION': 'redis://redis_educa:6379/',
+        'OPTIONS': {
+            'CLIENT_CLASS': 'django_redis.client.DefaultClient',
+        }
+    }
+}
 
 
 
-# CACHES = {
-#     'default': {
-#         "BACKEND": "EducationApp.cache.RedisCache",
-#         "LOCATION": "redis://127.0.0.1:6379/",
-#         "OPTIONS": {
-#             "CLIENT_CLASS": "django_redis.client.DefaultClient",
-#         }
-#     }
-# }
+
+
+CELERY_BROKER_URL = os.environ.get("CELERY_BROKER", "redis://redis_educa:6379/")
+CELERY_RESULT_BACKEND = os.environ.get("CELERY_BROKER", "redis://redis_educa:6379/")
+CELERY_BROKER_TRANSPORT_OPTION = {'visibility_timeout': 3600}
+
+CELERY_ACCEPT_CONTENT = ['application/json']
+CELERY_TASK_SERIALIZER = 'json'
+CELERY_RESULT_SERIALIZER = 'json'
+
+
+status_ticket = ['solved', 'unsolved', 'frozen']

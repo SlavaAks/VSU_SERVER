@@ -9,7 +9,7 @@ urlpatterns = [
          views.ManageCourseListViewAPI.as_view()
          ),
 
-    path('/', views.CourseViewApi.as_view()
+    path('', views.CourseViewApi.as_view()
          ),
 
     path('<pk>/',

@@ -4,9 +4,9 @@ from django.contrib.contenttypes.models import ContentType
 from django.contrib.contenttypes.fields import GenericForeignKey
 from .fields import OrderField
 from django.template.loader import render_to_string
-from django.utils.safestring import mark_safe
-from cloudinary_storage.storage import VideoMediaCloudinaryStorage
-from cloudinary_storage.validators import validate_video
+
+# from cloudinary_storage.storage import VideoMediaCloudinaryStorage
+# from cloudinary_storage.validators import validate_video
 
 
 class Subject(models.Model):
@@ -18,6 +18,15 @@ class Subject(models.Model):
 
     def __str__(self):
         return self.title
+
+    def __unicode__(self):
+        return self.title
+
+    def to_json(self):
+        return {
+            'id': self.id,
+            'title': self.title,
+        }
 
 
 class Course(models.Model):
@@ -108,5 +117,4 @@ class VideoURL(ItemBase):
 
 class Video(ItemBase):
     # video= models.FileField(upload_to='video')
-    video = models.ImageField(upload_to='videos', blank=True, storage=VideoMediaCloudinaryStorage(),
-                              validators=[validate_video])
+    video = models.FileField(upload_to='videos', blank=True)
