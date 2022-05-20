@@ -11,7 +11,7 @@ from rest_framework import generics, status
 from EducationApp import settings
 from ..models import Subject, Module, Content
 from .serializers import TextSerializer, VideoSerializer, FileSerializer, ImageSerializer, \
-    ModuleSerializer, ContentSerializer, SubjectSerializer
+    ModuleSerializer, ContentSerializer, SubjectSerializer, TestSerializer
 from django.shortcuts import get_object_or_404
 from rest_framework.views import APIView
 from rest_framework.response import Response
@@ -21,7 +21,7 @@ from rest_framework.permissions import IsAuthenticated, IsAdminUser
 from rest_framework import viewsets
 from .serializers import CourseSerializer
 from .permissions import IsAuthor
-from cloudinary.models import UploadedFile
+
 
 # redis_instance = redis.StrictRedis(host=settings.REDIS_HOST,
 #                                   port=settings.REDIS_PORT, db=0)
@@ -61,7 +61,7 @@ class ManageCourseListViewAPI(APIView):
         serializer = CourseSerializer(courses, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
-    @method_decorator(permission_required("courses.add_course"))
+    # @method_decorator(permission_required("courses.add_course"))
     def post(self, request):
         print(request.data)
         serializer = CourseSerializer(data=request.data)
@@ -129,6 +129,17 @@ class CourseModuleOrderAPI(APIView):
             ord = ord + 1
         return Response(status.HTTP_202_ACCEPTED)
 
+class ModuleContentOrderAPI(APIView):
+    permission_classes = (IsAuthenticated, IsAuthor)
+
+    def post(self, request, pk):
+        ord = 0
+        for i in request.data:
+            print(i["id"])
+            Content.objects.filter(id=i["id"]).update(order=ord)
+            ord = ord + 1
+        return Response(status.HTTP_202_ACCEPTED)
+
 
 class ModuleManagerAPI(APIView):
     permission_classes = (IsAuthenticated, IsAuthor)
@@ -164,8 +175,9 @@ class ContentAPI(APIView):
 
     def post(self, request, module_id):
         content_type = {"text": TextSerializer, "video": VideoSerializer, "file": FileSerializer,
-                        "image": ImageSerializer}
+                        "image": ImageSerializer,"test":TestSerializer}
         data = request.data.dict()
+        print(data)
         try:
             data['content_type']
         except:

@@ -1,6 +1,7 @@
 from django.contrib.auth.models import (
     AbstractBaseUser, PermissionsMixin, BaseUserManager
 )
+from django.core.files.storage import FileSystemStorage
 from django.db import models
 from django.db import transaction
 from django.utils import timezone
@@ -47,6 +48,10 @@ class User(AbstractBaseUser, PermissionsMixin):
     email = models.EmailField(max_length=40, unique=True)
     first_name = models.CharField(max_length=30, blank=True)
     last_name = models.CharField(max_length=30, blank=True)
+    phone=models.IntegerField(null=True,blank=True)
+    country=models.CharField(max_length=20,null=True,blank=True)
+    city=models.CharField(max_length=20,null=True,blank=True)
+    avatar=models.ImageField(upload_to='avatar',null=True,storage=FileSystemStorage(location='/media/avatar'))
     is_active = models.BooleanField(default=False)
     is_staff = models.BooleanField(default=True)
     date_joined = models.DateTimeField(default=timezone.now)

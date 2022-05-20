@@ -74,7 +74,8 @@ class Content(models.Model):
                                      limit_choices_to={'model__in':('text',
                                                                     'video',
                                                                     'image',
-                                                                    'file')},
+                                                                    'file',
+                                                                    'test')},
                                      on_delete=models.CASCADE)
     object_id = models.PositiveIntegerField()
     item = GenericForeignKey('content_type', 'object_id')
@@ -116,5 +117,8 @@ class VideoURL(ItemBase):
     url = models.URLField()
 
 class Video(ItemBase):
-    # video= models.FileField(upload_to='video')
     video = models.FileField(upload_to='videos', blank=True)
+
+
+class Test(ItemBase):
+    answer=models.JSONField()

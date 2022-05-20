@@ -15,6 +15,18 @@ from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from django.template.loader import render_to_string
 from django.core.mail import EmailMessage, send_mail
 
+import logging
+
+logger = logging.getLogger(__name__)
+logger.setLevel(logging.INFO)
+# create the logging file handler
+fh = logging.FileHandler("user.log")
+formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+fh.setFormatter(formatter)
+# add handler to logger object
+logger.addHandler(fh)
+
+
 
 class TokenGenerator(PasswordResetTokenGenerator):
     def _make_hash_value(self, user, timestamp):
@@ -55,12 +67,34 @@ class CreateUserAPIView(APIView):
         #     mail_subject, message, to=[to_email]
         # )
         # email.send()
-        send_mail(mail_subject,
+        try:
+            send_mail(mail_subject,
                   message,
                   'aks8slava@mail.ru',
                   [to_email])
+        except:
+            logger.error("письмо не отправлено")
+        finally:
 
-        return Response(status=status.HTTP_201_CREATED)
+            return Response(status=status.HTTP_201_CREATED)
+
+    def patch(self,request):
+
+        logger.info("Program started")
+        # print(request.data.dict())
+        print("ss")
+        print(request.data)
+        user_data = request.data.dict()
+        print(user_data)
+        logger.info(f'{user_data}')
+        # print(user_data["avatar"])
+
+        serializer = UserSerializer(data=user_data,partial=True)
+        # print(user_data["avatar"])
+        user=serializer.update(request, user_data)
+        user=UserSerializer(user)
+        print(user.data)
+        return Response(user.data,status=status.HTTP_200_OK)
 
 def activate(request, uidb64, token):
         try:
@@ -74,4 +108,8 @@ def activate(request, uidb64, token):
             return HttpResponse('Thank you for your email confirmation. Now you can login your account.')
         else:
             return HttpResponse('Activation link is invalid!')
+
+
+
+
 

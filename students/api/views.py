@@ -37,7 +37,8 @@ class StudentSubjectCoursesAPI(APIView):
     def get(self,request,id):
         try:
             subject=Subject.objects.get(id=id)
-            courses=Course.objects.filter(subject=subject)
+            courses=Course.objects.filter(subject=subject).exclude(students__in=[request.user])
+            # courses=courses.exclude(students_in=[request.user])
             serializer=CourseSerializer(courses,many=True)
             return Response(serializer.data,status=status.HTTP_200_OK)
         except:
@@ -96,7 +97,9 @@ class StudentContentListView(APIView):
             try:
                 self.check_object_permissions(request, module.course)
                 contents=Content.objects.filter(module=module)
+                print(contents)
                 serializer = ContentSerializer(contents,many=True)
+
                 return Response(serializer.data,status=status.HTTP_200_OK)
             except:
                  return Response(status=status.HTTP_406_NOT_ACCEPTABLE)

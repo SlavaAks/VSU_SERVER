@@ -17,7 +17,7 @@ def send_email_task_befor_response(email):
               'aks8slava@mail.ru',
               [email])
 
-    return None
+
 
 @shared_task
 def send_email_task_after_response(email):

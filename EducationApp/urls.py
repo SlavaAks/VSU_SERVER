@@ -52,7 +52,7 @@ urlpatterns = [
  path('students/', include('students.urls')),
  path('login/', ObtainJSONWebToken.as_view()),
  path('refresh/',RefreshJSONWebToken.as_view(**permission_cls)),
- path('registration/', CreateUserAPIView.as_view()),
+ path('user/', CreateUserAPIView.as_view()),
 path('activate/(?P<uidb64>[0-9A-Za-z_\-]+)/(?P<token>[0-9A-Za-z]{1,13}-[0-9A-Za-z]{1,20})/',
 activate, name='activate'),
 #     path('', CourseListView.as_view(), name='course_list'),

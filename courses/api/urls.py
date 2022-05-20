@@ -24,6 +24,7 @@ urlpatterns = [
     path('<pk>/module/order/',
          views.CourseModuleOrderAPI.as_view()
          ),
+    path('module/<pk>/order/', views.ModuleContentOrderAPI.as_view()),
 
     path('module/<int:module_id>/content/',
          views.ContentAPI.as_view()),

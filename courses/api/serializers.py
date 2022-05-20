@@ -3,7 +3,7 @@ from django.core.files import File as _File
 from django.contrib.contenttypes.models import ContentType
 from rest_framework import serializers
 
-from courses.models import Course, Subject, Module, Content, ItemBase, Text, File, Image, Video
+from courses.models import Course, Subject, Module, Content, ItemBase, Text, File, Image, Video, Test
 
 
 class SubjectSerializer(serializers.ModelSerializer):
@@ -167,10 +167,9 @@ class FileSerializer(serializers.ModelSerializer):
         model = File
         fields = ["title"]
 
-    def create(self, validated_data, request,dbx):
+    def create(self, validated_data, request):
         validated_data["owner"] = request.user
         print(request.data['file'])
-        response = dbx.files_upload(request.data['file'].file.read(), '/myfile.mp4')
         validated_data["file"] = request.data['file']
         file = File.objects.create(**validated_data)
         file.save()
@@ -193,18 +192,45 @@ class ImageSerializer(ItemSerializer):
         model = Image
 
 
+class TestSerializer(ItemSerializer):
+    class Meta:
+        model = Test
+        fields=['title','answer']
+
+    def create(self, validated_data, request):
+        print(validated_data)
+        validated_data['owner'] = request.user
+        test = Test.objects.create(**validated_data)
+
+        test.save()
+        return test
+
+    def validate(self, attrs):
+        print(attrs)
+        credentials = {
+            'title': attrs.get('title'),
+            'answer': attrs.get('answer'),
+        }
+
+        if all(credentials.values()):
+            return credentials
+        else:
+            msg = "Must include all fields"
+            raise serializers.ValidationError(msg)
+
 class VideoSerializer(ItemSerializer):
     class Meta:
         model = Video
         fields = ['title']
 
+
+
     def create(self, validated_data, request):
         validated_data['owner'] = request.user
-        print(request.data['video']._name)
         validated_data['video'] = request.data['video']
         video=Video(**validated_data)
         # video = Video.objects.create(**validated_data)
-        print(video.video,"test")
+
         video.save()
         return video
 

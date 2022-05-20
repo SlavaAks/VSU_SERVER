@@ -49,10 +49,10 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'rest_framework',
     'corsheaders',
-    # 'cloudinary_storage',
+
     'django.contrib.staticfiles',
     'storages',
-    # 'cloudinary',
+
     'courses',
     'students',
     'users',
@@ -205,7 +205,7 @@ DROPBOX_APP_KEY = "oe3qs842awm9lhv"
 DROPBOX_APP_SECRET_KEY = "iiomjbcfinh8bqb"
 DROPBOX_ROOT_PATH = ''
 
-DROPBOX_OAUTH2_TOKEN = "sl.BHlwmK-Hg1uIUB3ko8-BttS4z_vMWtC_tBId4tVOulgOwVyubvIa1Ke079kDKdHywhoGjY5FlETSMwVlL8ZdtsKPaQJwOv6cBYeXUAGz8Af9sSSn8YLlvpsWooaDC1w5138kfYHJUXgm"
+DROPBOX_OAUTH2_TOKEN = "sl.BHsxUzcAVdrJ5S0WUg0KUmMtgDuHSiAPzUiWOnKSazCuZ8mjlyPQRr3n_KuYJxH5pKP1FD-jNVR1ouUfyaPnYpsFhvuzREWMWT_yTBB6w8H1y2eIk6kkMiGTx0vmBomCGOSXUOkvIIuG"
 DEFAULT_FILE_STORAGE = 'storages.backends.dropbox.DropBoxStorage'
 
 REDIS_HOST = 'redis_educa'
@@ -235,3 +235,58 @@ CELERY_RESULT_SERIALIZER = 'json'
 
 
 status_ticket = ['solved', 'unsolved', 'frozen']
+
+
+#
+#
+# LOGGING = {
+#     'version': 1,
+#     'disable_existing_loggers': False,
+#     'formatters': {
+#         'verbose': {
+#             'format': '{levelname} {asctime} {module} {process:d} {thread:d} {message}',
+#             'style': '{',
+#         },
+#         'simple': {
+#             'format': '{levelname} {message}',
+#             'style': '{',
+#         },
+#     },
+#     'filters': {
+#         'special': {
+#             '()': 'django.utils.log.RequireDebugTrue',
+#         },
+#         'require_debug_true': {
+#             '()': 'django.utils.log.RequireDebugTrue',
+#         },
+#     },
+#     'handlers': {
+#         'console': {
+#             'level': 'INFO',
+#             'filters': ['require_debug_true'],
+#             'class': 'logging.StreamHandler',
+#             'formatter': 'simple'
+#         },
+#         'mail_admins': {
+#             'level': 'ERROR',
+#             'class': 'django.utils.log.AdminEmailHandler',
+#             'filters': ['special']
+#         }
+#     },
+#     'loggers': {
+#         'django': {
+#             'handlers': ['console'],
+#             'propagate': True,
+#         },
+#         'django.request': {
+#             'handlers': ['mail_admins'],
+#             'level': 'ERROR',
+#             'propagate': False,
+#         },
+#         'EducationApp.custom': {
+#             'handlers': ['console', 'mail_admins'],
+#             'level': 'INFO',
+#             'filters': ['special']
+#         }
+#     }
+# }

@@ -22,7 +22,7 @@ class APIUserTickets(APIView):
         if serializer.is_valid():
             serializer.create(request)
             # send_email_task_befor_response.apply_async(args=[request.user.email])
-            send_email_task_befor_response(request.user.email)
+            send_email_task_befor_response.delay(request.user.email)
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         else:
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
