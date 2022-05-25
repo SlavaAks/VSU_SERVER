@@ -9,6 +9,8 @@ urlpatterns = [
          views.ManageCourseListViewAPI.as_view()
          ),
 
+    path('last/',views.CourseLastViewAPI.as_view()),
+
     path('', views.CourseViewApi.as_view()
          ),
 

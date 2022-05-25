@@ -183,8 +183,8 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 # Авторизированный пользователь в моделе User
 AUTH_USER_MODEL = "users.User"
 
-MEDIA_ROOT = os.path.join('', 'media')
-# MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR ,'media')
+MEDIA_URL = 'media/'
 
 
 # EMAIL_USE_TLS = True
@@ -205,8 +205,10 @@ DROPBOX_APP_KEY = "oe3qs842awm9lhv"
 DROPBOX_APP_SECRET_KEY = "iiomjbcfinh8bqb"
 DROPBOX_ROOT_PATH = ''
 
-DROPBOX_OAUTH2_TOKEN = "sl.BHsxUzcAVdrJ5S0WUg0KUmMtgDuHSiAPzUiWOnKSazCuZ8mjlyPQRr3n_KuYJxH5pKP1FD-jNVR1ouUfyaPnYpsFhvuzREWMWT_yTBB6w8H1y2eIk6kkMiGTx0vmBomCGOSXUOkvIIuG"
+
+DROPBOX_OAUTH2_TOKEN = "sl.BIOpDS6h5y5gDylewVuJAQcwIGMO2Gk13-qKdpj0kdLdluqbiM7CnuAnSzHZEAl9Ijhy4_b_yelUkXD-nFAGr5gTcOx0Q0NyjxYalNSQ6RVCjpIEEeFldONTNeXLmytFoXfewjGz2-iQ"
 DEFAULT_FILE_STORAGE = 'storages.backends.dropbox.DropBoxStorage'
+
 
 REDIS_HOST = 'redis_educa'
 REDIS_PORT = 6379
@@ -237,56 +239,56 @@ CELERY_RESULT_SERIALIZER = 'json'
 status_ticket = ['solved', 'unsolved', 'frozen']
 
 
-#
-#
-# LOGGING = {
-#     'version': 1,
-#     'disable_existing_loggers': False,
-#     'formatters': {
-#         'verbose': {
-#             'format': '{levelname} {asctime} {module} {process:d} {thread:d} {message}',
-#             'style': '{',
-#         },
-#         'simple': {
-#             'format': '{levelname} {message}',
-#             'style': '{',
-#         },
-#     },
-#     'filters': {
-#         'special': {
-#             '()': 'django.utils.log.RequireDebugTrue',
-#         },
-#         'require_debug_true': {
-#             '()': 'django.utils.log.RequireDebugTrue',
-#         },
-#     },
-#     'handlers': {
-#         'console': {
-#             'level': 'INFO',
-#             'filters': ['require_debug_true'],
-#             'class': 'logging.StreamHandler',
-#             'formatter': 'simple'
-#         },
-#         'mail_admins': {
-#             'level': 'ERROR',
-#             'class': 'django.utils.log.AdminEmailHandler',
-#             'filters': ['special']
-#         }
-#     },
-#     'loggers': {
-#         'django': {
-#             'handlers': ['console'],
-#             'propagate': True,
-#         },
-#         'django.request': {
-#             'handlers': ['mail_admins'],
-#             'level': 'ERROR',
-#             'propagate': False,
-#         },
-#         'EducationApp.custom': {
-#             'handlers': ['console', 'mail_admins'],
-#             'level': 'INFO',
-#             'filters': ['special']
-#         }
-#     }
-# }
+
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'formatters': {
+        'verbose': {
+            'format': '{levelname} {asctime} {module} {process:d} {thread:d} {message}',
+            'style': '{',
+        },
+        'simple': {
+            'format': '{levelname} {message}',
+            'style': '{',
+        },
+    },
+    'filters': {
+        'special': {
+            '()': 'django.utils.log.RequireDebugTrue',
+        },
+        'require_debug_true': {
+            '()': 'django.utils.log.RequireDebugTrue',
+        },
+    },
+    'handlers': {
+        'console': {
+            'level': 'INFO',
+            'filters': ['require_debug_true'],
+            'class': 'logging.StreamHandler',
+            'formatter': 'simple'
+        },
+        'mail_admins': {
+            'level': 'ERROR',
+            'class': 'django.utils.log.AdminEmailHandler',
+            'filters': ['special']
+        }
+    },
+    'loggers': {
+        'django': {
+            'handlers': ['console'],
+            'propagate': True,
+        },
+        'django.request': {
+            'handlers': ['mail_admins'],
+            'level': 'ERROR',
+            'propagate': False,
+        },
+        'EducationApp.custom': {
+            'handlers': ['console', 'mail_admins'],
+            'level': 'INFO',
+            'filters': ['special']
+        }
+    }
+}

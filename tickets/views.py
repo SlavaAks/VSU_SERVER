@@ -55,6 +55,9 @@ class APISupportTicket(APIView,JeneralMixin):
         serializer=TicketSerializer(ticket)
         return Response(serializer.data,status=status.HTTP_200_OK)
 
+
+
+
 class ViewResponse(APIView,JeneralMixin):
     permission_classes = (IsAuthenticated, IsAuthor)
 

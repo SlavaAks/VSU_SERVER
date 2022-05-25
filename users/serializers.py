@@ -39,7 +39,7 @@ class UserSerializer(serializers.ModelSerializer):
         user.city=user_data["city"]
         user.country=user_data["country"]
         user.phone=int(user_data["phone"])
-        # print(user_data["avatar"])
-        # user.avatar=user_data["avatar"]
+        print(user_data["avatar"].__dict__,"ss")
+        user.avatar=user_data["avatar"]
         user.save()
         return user

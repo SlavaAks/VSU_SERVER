@@ -11,7 +11,7 @@ from rest_framework import generics, status
 from EducationApp import settings
 from ..models import Subject, Module, Content
 from .serializers import TextSerializer, VideoSerializer, FileSerializer, ImageSerializer, \
-    ModuleSerializer, ContentSerializer, SubjectSerializer, TestSerializer
+    ModuleSerializer, ContentSerializer, SubjectSerializer, TestSerializer, VideoSerializerUrl
 from django.shortcuts import get_object_or_404
 from rest_framework.views import APIView
 from rest_framework.response import Response
@@ -80,6 +80,14 @@ class CourseViewApi(APIView):
         serializer = CourseSerializer(courses, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
+class CourseLastViewAPI(APIView):
+    permission_classes = (IsAuthenticated,)
+
+    def get(selfself,request):
+        qs = Course.objects.filter().exclude(students__in=[request.user])[:10]
+        serializer = CourseSerializer(qs, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
 
 class ManageCourseViewAPI(APIView):
     permission_classes = (IsAuthenticated,IsAuthor)
@@ -98,10 +106,8 @@ class CourseModuleAPI(APIView):
     permission_classes = (IsAuthenticated, IsAuthor)
 
     def get(self, request, pk):
-        # self.check_object_permissions(request, pk)
         modules = Module.objects.filter(course=pk)
         self.check_object_permissions(request, pk)
-        # self.get_permissions()[1].has_object_permission(request,CourseModuleAPI,2)
         serializer = ModuleSerializer(modules, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
@@ -159,23 +165,16 @@ class ContentAPI(APIView):
     permission_classes = (IsAuthenticated, IsAdminUser, IsAuthor)
 
     def get(self, request, module_id):
-        #######################обработать ошибку если нету такого модуля
-        # print(module_id)
-        # # contents=Module.objects.filter()
-        # print(module.id)
-        # # serializer=ModuleWithContentsSerializer(module)
-
-
+        # todo обработать ошибку если нету такого модуля
         contents = Content.objects.filter(module=module_id)
 
         serializer = ContentSerializer(contents, many=True)
-        # print(serializer.data)
 
         return Response(serializer.data, status=status.HTTP_200_OK)
 
     def post(self, request, module_id):
         content_type = {"text": TextSerializer, "video": VideoSerializer, "file": FileSerializer,
-                        "image": ImageSerializer,"test":TestSerializer}
+                        "image": ImageSerializer,"test":TestSerializer,"videoUrl":VideoSerializerUrl}
         data = request.data.dict()
         print(data)
         try:
@@ -183,15 +182,12 @@ class ContentAPI(APIView):
         except:
             raise
         if data['content_type'] in content_type.keys():
-            # print('rrrr')
-            # print(data)
-            # print(request.FILES)
             serializer = content_type[data.get('content_type')](data=data)
             try:
                 module = Module.objects.get(id=module_id)
             except:
                 return Response({"detail", "нет такого модуля"}, status=status.HTTP_400_BAD_REQUEST)
-
+            print(serializer.is_valid())
             if serializer.is_valid():
                 print(serializer.validated_data)
 
@@ -217,7 +213,6 @@ class ContentManagerAPI(APIView):
     permission_classes = (IsAuthenticated, IsAuthor)
 
     def delete(self, request, id):
-        print(id)
         try:
             event = Content.objects.get(id=id)
             if event:
@@ -229,5 +224,3 @@ class ContentManagerAPI(APIView):
             return Response(status=status.HTTP_404_NOT_FOUND)
 
         return Response(status=status.HTTP_204_NO_CONTENT)
-# {"title":"smath",
-# "slug":"sssssd"}

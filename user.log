@@ -505,3 +505,26 @@
 2022-05-18 12:45:29,576 - PatchUser - INFO - {'last_name': 'Volkov', 'first_name': 'Slava', 'phone': '3752950', 'email': 'aks8slava@mail.ru', 'country': 'Belarus', 'city': 'Vitebsk'}
 2022-05-18 12:45:29,576 - PatchUser - INFO - {'last_name': 'Volkov', 'first_name': 'Slava', 'phone': '3752950', 'email': 'aks8slava@mail.ru', 'country': 'Belarus', 'city': 'Vitebsk'}
 2022-05-20 09:53:36,259 - users.views - ERROR - письмо не отправлено
+2022-05-22 10:45:59,222 - users.views - ERROR - письмо не отправлено
+2022-05-23 10:46:06,707 - users.views - INFO - Program started
+2022-05-23 10:46:06,711 - users.views - INFO - {'last_name': ' ', 'first_name': ' ', 'phone': 'NaN', 'email': ' ', 'country': ' ', 'city': ' '}
+2022-05-23 10:46:09,191 - users.views - INFO - Program started
+2022-05-23 10:46:09,192 - users.views - INFO - {'last_name': ' ', 'first_name': ' ', 'phone': 'NaN', 'email': ' ', 'country': ' ', 'city': ' '}
+2022-05-23 11:04:10,395 - users.views - INFO - Program started
+2022-05-23 11:04:10,397 - users.views - INFO - {'last_name': 'w', 'first_name': 'ew', 'phone': '443', 'email': 'aks8slava@mail.ru', 'country': 'adaasd', 'city': 'asdsad'}
+2022-05-23 11:11:33,999 - users.views - INFO - Program started
+2022-05-23 11:11:34,002 - users.views - INFO - {'last_name': ' ', 'first_name': ' ', 'phone': 'NaN', 'email': ' ', 'country': ' ', 'city': ' '}
+2022-05-23 11:18:53,883 - users.views - INFO - Program started
+2022-05-23 11:18:53,884 - users.views - INFO - {'last_name': 'Aksenov', 'first_name': 'Slava', 'phone': '4343443', 'email': 'aks8slava@mail.ru', 'country': 'adsadsad', 'city': 'asdsdasd', 'avatar': <InMemoryUploadedFile: image (image/png)>}
+2022-05-23 11:25:21,710 - users.views - INFO - Program started
+2022-05-23 11:25:21,713 - users.views - INFO - {'last_name': 'sadasd', 'first_name': 'saas', 'phone': '33223', 'email': 'aks8slava@mail.ru', 'country': ' ', 'city': ' ', 'avatar': <InMemoryUploadedFile: image (image/png)>}
+2022-05-23 11:26:06,431 - users.views - INFO - Program started
+2022-05-23 11:26:06,433 - users.views - INFO - {'last_name': 'sadasd', 'first_name': 'saas', 'phone': '33223', 'email': 'aks8slava@mail.ru', 'country': ' ', 'city': ' ', 'avatar': <InMemoryUploadedFile: image (image/png)>}
+2022-05-23 11:28:31,581 - users.views - INFO - Program started
+2022-05-23 11:28:31,584 - users.views - INFO - {'last_name': 'sadasd', 'first_name': 'saas', 'phone': '33223', 'email': 'aks8slava@mail.ru', 'country': ' ', 'city': ' ', 'avatar': <InMemoryUploadedFile: image (image/png)>}
+2022-05-23 11:31:13,979 - users.views - INFO - Program started
+2022-05-23 11:31:13,982 - users.views - INFO - {'last_name': 'sadasd', 'first_name': 'saas', 'phone': '33223', 'email': 'aks8slava@mail.ru', 'country': ' ', 'city': ' ', 'avatar': <InMemoryUploadedFile: image (image/png)>}
+2022-05-23 11:32:53,603 - users.views - INFO - Program started
+2022-05-23 11:32:53,605 - users.views - INFO - {'last_name': 'sadasd', 'first_name': 'saas', 'phone': '33223', 'email': 'aks8slava@mail.ru', 'country': ' ', 'city': ' ', 'avatar': <InMemoryUploadedFile: image (image/png)>}
+2022-05-23 11:33:39,931 - users.views - INFO - Program started
+2022-05-23 11:33:39,933 - users.views - INFO - {'last_name': 'sadasd', 'first_name': 'saas', 'phone': '33223', 'email': 'aks8slava@mail.ru', 'country': ' ', 'city': ' ', 'avatar': <InMemoryUploadedFile: image (image/png)>}

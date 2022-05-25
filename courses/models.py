@@ -3,7 +3,9 @@ from users.models import User
 from django.contrib.contenttypes.models import ContentType
 from django.contrib.contenttypes.fields import GenericForeignKey
 from .fields import OrderField
+from django.contrib.postgres.fields import JSONField
 from django.template.loader import render_to_string
+import json
 
 # from cloudinary_storage.storage import VideoMediaCloudinaryStorage
 # from cloudinary_storage.validators import validate_video
@@ -115,10 +117,14 @@ class Image(ItemBase):
 
 class VideoURL(ItemBase):
     url = models.URLField()
+    def render(self):
+        return {"item":self.url,"title":self.title}
 
 class Video(ItemBase):
     video = models.FileField(upload_to='videos', blank=True)
 
 
 class Test(ItemBase):
-    answer=models.JSONField()
+    answer=JSONField()
+    def render(self):
+        return {"item":self.answer,"title":self.title}

@@ -3,7 +3,7 @@ from django.core.files import File as _File
 from django.contrib.contenttypes.models import ContentType
 from rest_framework import serializers
 
-from courses.models import Course, Subject, Module, Content, ItemBase, Text, File, Image, Video, Test
+from courses.models import Course, Subject, Module, Content, ItemBase, Text, File, Image, Video, Test, VideoURL
 
 
 class SubjectSerializer(serializers.ModelSerializer):
@@ -190,6 +190,29 @@ class FileSerializer(serializers.ModelSerializer):
 class ImageSerializer(ItemSerializer):
     class Meta:
         model = Image
+        fields = ['title']
+
+
+
+    def create(self, validated_data, request):
+        validated_data['owner'] = request.user
+        validated_data['image'] = request.data['image']
+        image=Image(**validated_data)
+        # video = Video.objects.create(**validated_data)
+
+        image.save()
+        return image
+
+    def validate(self, attrs):
+        credentials = {
+            'title': attrs.get('title'),
+        }
+
+        if all(credentials.values()):
+            return credentials
+        else:
+            msg = "Must include all fields"
+            raise serializers.ValidationError(msg)
 
 
 class TestSerializer(ItemSerializer):
@@ -245,6 +268,35 @@ class VideoSerializer(ItemSerializer):
             msg = "Must include all fields"
             raise serializers.ValidationError(msg)
 
+
+
+class VideoSerializerUrl(ItemSerializer):
+    class Meta:
+        model = VideoURL
+        fields = ['title','url']
+
+
+
+    def create(self, validated_data, request):
+        validated_data['owner'] = request.user
+        print(validated_data)
+        video=VideoURL(**validated_data)
+        # video = Video.objects.create(**validated_data)
+
+        video.save()
+        return video
+
+    def validate(self, attrs):
+        credentials = {
+            'title': attrs.get('title'),
+            'url':attrs.get('url')
+        }
+
+        if all(credentials.values()):
+            return credentials
+        else:
+            msg = "Must include all fields"
+            raise serializers.ValidationError(msg)
 
 # class TextSerializer(ItemSerializer):
 #     class Meta:
