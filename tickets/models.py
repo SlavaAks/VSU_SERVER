@@ -11,7 +11,6 @@ class Ticket(models.Model):
         STATUS_UNSOLVED = 'unsolved',_('Тикет не решен')
         STATUS_FROZEN = 'frozen',_('Тикет заморожен')
 
-
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     created = models.DateTimeField(auto_now_add=True)
     topic = models.CharField(max_length=200, db_index=True)

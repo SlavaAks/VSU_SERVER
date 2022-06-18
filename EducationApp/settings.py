@@ -13,7 +13,7 @@ import os
 from pathlib import Path
 
 import environ
-import datetime
+from datetime import datetime, timedelta
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -135,7 +135,7 @@ JWT_AUTH = {
     # 'ss',
     'JWT_VERIFY': True,
     'JWT_VERIFY_EXPIRATION': True,
-    'JWT_EXPIRATION_DELTA': datetime.timedelta(seconds=3000),
+    'JWT_EXPIRATION_DELTA': timedelta(seconds=3000),
     'JWT_AUTH_HEADER_PREFIX': 'Bearer',
     'JWT_ALLOW_REFRESH': True,
 
@@ -197,17 +197,21 @@ MEDIA_URL = 'media/'
 EMAIL_HOST = 'smtp.mail.ru'
 EMAIL_PORT = 2525
 EMAIL_HOST_USER = "aks8slava@mail.ru"
-EMAIL_HOST_PASSWORD = "wWXMt101qpdjLEYUh2QS"
+EMAIL_HOST_PASSWORD = "*************"
 EMAIL_USE_TLS = True
 EMAIL_USE_SSL = False
 
-DROPBOX_APP_KEY = "oe3qs842awm9lhv"
-DROPBOX_APP_SECRET_KEY = "iiomjbcfinh8bqb"
+DROPBOX_OAUTH2_TOKEN="***************"
+DROPBOX_APP_KEY="******"
+DROPBOX_APP_SECRET="*********"
+DROPBOX_API_EXPIRATION= datetime.utcnow() + timedelta(weeks=52)
+DROPBOX_OAUTH2_REFRESH_TOKEN="***************"
 DROPBOX_ROOT_PATH = ''
 
 
-DROPBOX_OAUTH2_TOKEN = "sl.BIOpDS6h5y5gDylewVuJAQcwIGMO2Gk13-qKdpj0kdLdluqbiM7CnuAnSzHZEAl9Ijhy4_b_yelUkXD-nFAGr5gTcOx0Q0NyjxYalNSQ6RVCjpIEEeFldONTNeXLmytFoXfewjGz2-iQ"
-DEFAULT_FILE_STORAGE = 'storages.backends.dropbox.DropBoxStorage'
+# # DROPBOX_OAUTH2_TOKEN = "sl.BIkecrgca4oYuynv294hZT05UQYYgNbLd9LXHBtULUhMCWwJtXvhtHekHWfNsdQ2mKo-CQRIVb3co-do1XZrTaWuQvnnt0_8lkzJBDfe31bDIIMEEkSLVUIlr4lRqrjxru2oYCaVt_G4"
+# DEFAULT_FILE_STORAGE = 'storages.backends.dropbox.DropBoxStorage'
+DEFAULT_FILE_STORAGE = "EducationApp.DropBoxCustom.DropBoxStorageCustom"
 
 
 REDIS_HOST = 'redis_educa'

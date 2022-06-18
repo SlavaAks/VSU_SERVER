@@ -528,3 +528,12 @@
 2022-05-23 11:32:53,605 - users.views - INFO - {'last_name': 'sadasd', 'first_name': 'saas', 'phone': '33223', 'email': 'aks8slava@mail.ru', 'country': ' ', 'city': ' ', 'avatar': <InMemoryUploadedFile: image (image/png)>}
 2022-05-23 11:33:39,931 - users.views - INFO - Program started
 2022-05-23 11:33:39,933 - users.views - INFO - {'last_name': 'sadasd', 'first_name': 'saas', 'phone': '33223', 'email': 'aks8slava@mail.ru', 'country': ' ', 'city': ' ', 'avatar': <InMemoryUploadedFile: image (image/png)>}
+2022-06-18 04:14:57,605 - users.views - INFO - Program started
+2022-06-18 04:14:57,609 - users.views - INFO - {'last_name': 'Alekseev', 'first_name': 'Igor', 'phone': '375295044322', 'email': 'tutor@mail.ru', 'country': 'Vitebsk', 'city': 'Vitebsk', 'avatar': <InMemoryUploadedFile: image (image/png)>}
+2022-06-18 04:15:19,463 - users.views - INFO - Program started
+2022-06-18 04:15:19,466 - users.views - INFO - {'last_name': 'Alekseev', 'first_name': 'Igor', 'phone': '37529504', 'email': 'tutor@mail.ru', 'country': 'Vitebsk', 'city': 'Vitebsk', 'avatar': <InMemoryUploadedFile: image (image/png)>}
+2022-06-18 04:41:56,686 - users.views - INFO - Program started
+2022-06-18 04:41:56,700 - users.views - INFO - {'last_name': 'Nikolaev', 'first_name': 'Igor', 'phone': 'NaN', 'email': 'undefined', 'country': 'undefined', 'city': 'null', 'avatar': <InMemoryUploadedFile: image (image/png)>}
+2022-06-18 13:52:00,250 - users.views - ERROR - письмо не отправлено
+2022-06-18 14:08:41,858 - users.views - INFO - Program started
+2022-06-18 14:08:41,862 - users.views - INFO - {'last_name': 'Akyonov', 'first_name': 'Vyacheslav', 'phone': '5044322', 'email': 'student1@mail.ru', 'country': 'Беларусь', 'city': 'Vitebsk', 'avatar': <InMemoryUploadedFile: image (image/png)>}

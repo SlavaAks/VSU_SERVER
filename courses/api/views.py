@@ -27,8 +27,8 @@ from .permissions import IsAuthor
 #                                   port=settings.REDIS_PORT, db=0)
 CACHE_TTL = getattr(settings, 'CACHE_TTL', DEFAULT_TIMEOUT)
 class SubjectViewAPI(APIView):
-    permission_classes = (IsAuthenticated, IsAdminUser)
-
+    # permission_classes = (IsAuthenticated, IsAdminUser)
+    permission_classes = (IsAuthenticated,)
     def get(self,request):
         if 'subjects' in cache:
             # get results from cache
@@ -176,7 +176,6 @@ class ContentAPI(APIView):
         content_type = {"text": TextSerializer, "video": VideoSerializer, "file": FileSerializer,
                         "image": ImageSerializer,"test":TestSerializer,"videoUrl":VideoSerializerUrl}
         data = request.data.dict()
-        print(data)
         try:
             data['content_type']
         except:
@@ -187,13 +186,8 @@ class ContentAPI(APIView):
                 module = Module.objects.get(id=module_id)
             except:
                 return Response({"detail", "нет такого модуля"}, status=status.HTTP_400_BAD_REQUEST)
-            print(serializer.is_valid())
             if serializer.is_valid():
-                print(serializer.validated_data)
-
                 obj = serializer.create(serializer.validated_data, request)
-                # UploadedFile(file='courses/static/file_example_XLSX_50.xlsx')
-                print(obj)
                 content = Content.objects.create(module=module, item=obj)
                 content.save()
                 return Response({"detail": "item is created"}, status=status.HTTP_201_CREATED)
